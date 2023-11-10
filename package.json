@@ -25,5 +25,12 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.6.3"
-  }
+  },
+  "keywords": [
+    "2D games",
+    "pathfinding",
+    "astar",
+    "typescript"
+  ],
+  "homepage": "https://github.com/Arcia125/pather#readme"
 }
