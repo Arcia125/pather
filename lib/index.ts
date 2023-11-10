@@ -1,7 +1,9 @@
 import {
-  findPath
+  findPath,
+  PathNode,
 } from './pathFinding';
 
 export {
-  findPath
+  findPath,
+  PathNode,
 };

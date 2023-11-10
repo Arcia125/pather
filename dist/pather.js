@@ -103,5 +103,6 @@ class N {
 }
 const g = (...i) => new N(...i).findPath();
 export {
+  r as PathNode,
   g as findPath
 };

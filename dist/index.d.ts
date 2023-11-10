@@ -1,2 +1,2 @@
-import { findPath } from './pathFinding';
-export { findPath };
+import { findPath, PathNode } from './pathFinding';
+export { findPath, PathNode, };
