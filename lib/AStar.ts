@@ -58,6 +58,8 @@ export class AStar {
    */
   public end: PathNode;
 
+  private iterations: number;
+
   public config: Required<AStarParams>;
   public constructor(config: AStarParams) {
 
@@ -69,6 +71,8 @@ export class AStar {
       isDone: config.isDone || IS_DONE_FUNCS.DEFAULT
     };
 
+    this.iterations = 0;
+
     this.start = new PathNode(null, config.startPos);
     this.end =  new PathNode(null, config.endPos);
 
@@ -77,10 +81,14 @@ export class AStar {
 
   public findPath = () => {
     while (this.possibleNodes.length) {
+      if (this.iterations >= this.config.maxIterations) {
+        return;
+      }
       const solution = this.checkNode();
       if (solution?.path) {
         return solution.path;
       }
+      this.iterations++;
     }
   };
 
