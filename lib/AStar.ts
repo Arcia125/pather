@@ -1,80 +1,10 @@
-
-export type Position = {
-  x: number;
-  y: number;
-};
-
-export class PathNode {
-
-  public static equals(nodeA: PathNode, nodeB: PathNode) {
-    if (!nodeA.position || !nodeB.position) {
-      return false;
-    }
-    return nodeA.position?.x === nodeB.position?.x && nodeA.position?.y === nodeB.position?.y;
-  }
-
-  /**
-   * movement cost to move from the starting point to this node
-   */
-  public g = 0;
-  /**
-   * estimated movement cost  to move from this node to the end
-   */
-  public h = 0;
-
-  public constructor(public parent: PathNode | null = null, public position: Position) {
-
-  }
-
-  public equals = (node: PathNode) => PathNode.equals(this, node);
-
-  /**
-   * total cost (g + h)
-   */
-  public get f() {
-    return this.g + this.h;
-  }
-}
-
-const backtrace = (node: PathNode) => {
-  const path: PathNode[] = [];
-  let current = node;
-  while (current.parent) {
-    path.push(current);
-    current = current.parent;
-  }
-  return path;
-};
-
-const getNeigbors = (node: PathNode, diagonal: boolean = false) => {
-  const x = node.position.x;
-  const y = node.position.y;
-  let dirs = [
-    { x: 0, y: -1 },
-    { x: 0, y: 1 },
-    { x: -1, y: 0 },
-    { x: 1, y: 0 }
-  ];
-  if (diagonal) {
-    dirs = dirs.concat([
-      { x: -1, y: -1 },
-      { x: 1, y: -1 },
-      { x: -1, y: 1 },
-      { x: 1, y: 1 },
-    ]);
-  }
-
-  return dirs.map(dir => {
-    return new PathNode(node, {
-      x: x + dir.x,
-      y: y + dir.y,
-    });
-  });
-};
+import { backtrace, getNeigbors } from './utils';
+import { Position } from './models';
+import { PathNode } from './pathNode';
 
 type HEURISTIC = (node: PathNode, endNode: PathNode) => number;
 
-type IS_DONE = (node: PathNode, endNOde: PathNode) => boolean;
+type IS_DONE = (node: PathNode, endNode: PathNode) => boolean;
 
 type WOULD_COLLIDE = (node: PathNode) => boolean;
 
@@ -185,7 +115,3 @@ export class AStar {
     }
   };
 }
-
-export const findPath = (...args: ConstructorParameters<typeof AStar>) => {
-  return new AStar(...args).findPath();
-};
