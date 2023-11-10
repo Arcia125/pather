@@ -24,8 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "publish": "npm publish --access public"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
