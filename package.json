@@ -1,6 +1,11 @@
 {
   "name": "pather",
   "version": "1.0.0",
+  "author": {
+    "email": "tauren125@gmail.com",
+    "name": "Kevin Hallett",
+    "url": "https://kevinmhallett.com"
+  },
   "type": "module",
   "main": "./dist/pather.umd.cjs",
   "module": "./dist/pather.js",
