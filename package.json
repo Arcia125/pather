@@ -5,6 +5,7 @@
   "main": "./dist/pather.umd.cjs",
   "module": "./dist/pather.js",
   "types": "./dist/index.d.ts",
+  "license": "MIT",
   "exports": {
     ".": {
       "import": "./dist/pather.js",
