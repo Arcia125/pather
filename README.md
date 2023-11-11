@@ -25,8 +25,8 @@ findPath({
     startPos: { x: 0, y: 0 },
     endPos: { x: 4, y: 4 },
     // diagonal: true,
-    wouldCollide: (node) => state.grid[node.position.y][node.position.x] === 1,
-    isOutOfBounds: (node) => typeof (state.grid?.[node.position.y]?.[node.position.x]) === 'undefined',
+    wouldCollide: (node) => grid[node.position.y][node.position.x] === 1,
+    isOutOfBounds: (node) => typeof (grid?.[node.position.y]?.[node.position.x]) === 'undefined',
   });
 
 ```
