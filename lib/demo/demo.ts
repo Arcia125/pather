@@ -1,5 +1,7 @@
-import { AStar } from './AStar';
-import { PathNode } from './pathNode';
+import { AStar } from '../AStar';
+import { PathNode } from '../pathNode';
+import { ActionButton } from './ActionButton';
+import { ActionCheckbox } from './ActionCheckbox';
 
 const COLORS = {
   START: '#05998c',
@@ -81,6 +83,7 @@ const state: {
   possibleIndex: number;
   checkedIndex: number;
   speed: number;
+  diagonal: boolean;
   placing: typeof CELLS[keyof typeof CELLS];
   grid: number[][];
 } = {
@@ -90,6 +93,7 @@ const state: {
   possibleIndex: 0,
   checkedIndex: 0,
   speed: 0.01,
+  diagonal: false,
   placing: CELLS.WALL,
   grid: getInitialGrid()
 };
@@ -98,7 +102,7 @@ const createSearch = () => {
   return new AStar({
     startPos: findCell(CELLS.START),
     endPos: findCell(CELLS.END),
-    // diagonal: true,
+    diagonal: state.diagonal,
     wouldCollide: (node) => state.grid[node.y][node.x] === 1,
     isOutOfBounds: (node) => typeof (state.grid?.[node.y]?.[node.x]) === 'undefined',
   });
@@ -109,6 +113,15 @@ let search = createSearch();
 
 
 state.path = search.findPath();
+
+const reset = () => {
+  state.pathIndex = 0;
+  state.possibleIndex = 0;
+  state.checkedIndex = 0;
+  state.running = false;
+  search = createSearch();
+  state.path = search.findPath();
+};
 
 const update = (_timeStamp: number) => {
   if (!state.path) {
@@ -303,36 +316,15 @@ const mainLoop = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
 };
 
 
-class ActionButton {
-  public element: HTMLButtonElement;
-  public constructor(selector: string, handler: (ev: MouseEvent) => void) {
-    this.element = document.querySelector(selector) as HTMLButtonElement;
-    if (!this.element) {
-      throw new Error(`missing button ${selector}`);
-    }
-    this.onClick(handler);
-  }
-
-  public onClick = (handler: (ev: MouseEvent) => void) => {
-    this.element.addEventListener('click', handler);
-  };
-}
-
 const start = () => {
   const canvas = document.querySelector('#main-demo-canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
   new ActionButton('#reset-button', () => {
-    state.pathIndex = 0;
-    state.possibleIndex = 0;
-    state.checkedIndex = 0;
-    state.running = false;
-    search = createSearch();
-    state.path = search.findPath();
+    reset();
   });
   new ActionButton('#start-button', () => {
+    reset();
     state.running = true;
-    state.path = search.findPath();
-    state.path = search.findPath();
   });
   new ActionButton('#place-start-button', () => {
     state.placing = CELLS.START;
@@ -350,11 +342,13 @@ const start = () => {
     }
     state.grid[0][0] = CELLS.START;
     state.grid[state.grid.length - 1][state.grid[0].length - 1] = CELLS.END;
-    state.pathIndex = 0;
-    state.possibleIndex = 0;
-    state.checkedIndex = 0;
-    search = createSearch();
+    reset();
+
   });
+
+  new ActionCheckbox('#diagonal-checkbox', (event) => {
+    state.diagonal = (event.target as HTMLInputElement).checked;
+  })
 
   if (!ctx) {
     throw new Error('no context found');
@@ -408,9 +402,7 @@ const start = () => {
       state.grid[coordSystemPos.y][coordSystemPos.x] = state.placing;
       state.placing = CELLS.WALL;
     }
-    search = createSearch();
-    state.path = search.findPath();
-    // state.path = search.findPath();
+    reset();
   });
 
   mainLoop(ctx, canvas);
