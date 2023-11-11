@@ -89,7 +89,7 @@ const state: {
   pathIndex,
   possibleIndex: 0,
   checkedIndex: 0,
-  speed: 5.5,
+  speed: 0.5,
   placing: CELLS.WALL,
   grid: getInitialGrid()
 };

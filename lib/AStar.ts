@@ -88,7 +88,7 @@ export class AStar {
     const end = new PathNode(null, this.config.endPos);
     const possibleNodes: PathNode[] = [];
     const checkedNodes: PathNode[] = [];
-    possibleNodes.push(this.start);
+    possibleNodes.push(start);
     return {
       iterations,
       start,
