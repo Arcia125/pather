@@ -8,10 +8,13 @@ type IS_DONE = (node: PathNode, endNode: PathNode) => boolean;
 
 type WOULD_COLLIDE = (node: PathNode) => boolean;
 
+type IS_OUT_OF_BOUNDS = (node: PathNode) => boolean;
+
 export type FUNCTIONS = {
   HEURISTIC: HEURISTIC;
   IS_DONE: IS_DONE;
   WOULD_COLLIDE: WOULD_COLLIDE;
+  IS_OUT_OF_BOUNDS: IS_OUT_OF_BOUNDS;
 };
 
 export const HEURISTIC_FUNCS: Record<'DEFAULT', FUNCTIONS['HEURISTIC']> = {
@@ -30,6 +33,7 @@ type AStarParams = {
   diagonal?: boolean;
   maxIterations?: number;
   wouldCollide: FUNCTIONS['WOULD_COLLIDE'];
+  isOutOfBounds: FUNCTIONS['IS_OUT_OF_BOUNDS'];
   isDone?: FUNCTIONS['IS_DONE'];
   heuristic?: FUNCTIONS['HEURISTIC'];
 };
@@ -43,11 +47,11 @@ export class AStar {
   /**
    * Open list of nodes to be checked
    */
-  public possibleNodes: PathNode[] = [];
+  public possibleNodes: PathNode[];
   /**
    * Closed list of nodes to be checked
    */
-  public checkedNodes: PathNode[] = [];
+  public checkedNodes: PathNode[];
 
   /**
    * Beginning node
@@ -62,7 +66,6 @@ export class AStar {
 
   public config: Required<AStarParams>;
   public constructor(config: AStarParams) {
-
     this.config = {
       ...config,
       heuristic: config.heuristic || HEURISTIC_FUNCS.DEFAULT,
@@ -71,15 +74,39 @@ export class AStar {
       isDone: config.isDone || IS_DONE_FUNCS.DEFAULT
     };
 
-    this.iterations = 0;
-
-    this.start = new PathNode(null, config.startPos);
-    this.end =  new PathNode(null, config.endPos);
-
-    this.possibleNodes.push(this.start);
+    const { start, end, iterations, possibleNodes, checkedNodes } = this.initialState();
+    this.possibleNodes = possibleNodes;
+    this.checkedNodes = checkedNodes;
+    this.start = start;
+    this.end = end;
+    this.iterations = iterations;
   }
 
+  private initialState = () => {
+    const iterations = 0;
+    const start = new PathNode(null, this.config.startPos);
+    const end = new PathNode(null, this.config.endPos);
+    const possibleNodes: PathNode[] = [];
+    const checkedNodes: PathNode[] = [];
+    possibleNodes.push(this.start);
+    return {
+      iterations,
+      start,
+      end,
+      possibleNodes,
+      checkedNodes
+    }
+  };
+
   public findPath = () => {
+    if (this.iterations !== 0) {
+      const { start, end, iterations, possibleNodes, checkedNodes } = this.initialState();
+      this.possibleNodes = possibleNodes;
+      this.checkedNodes = checkedNodes;
+      this.start = start;
+      this.end = end;
+      this.iterations = iterations;
+    }
     while (this.possibleNodes.length) {
       if (this.iterations >= this.config.maxIterations) {
         return;
@@ -108,6 +135,9 @@ export class AStar {
 
     const neighbors = getNeigbors(currentNode, this.config.diagonal);
     for (let neighbor of neighbors) {
+      if (this.config.isOutOfBounds(neighbor)) {
+        continue;
+      }
       if (this.config.wouldCollide(neighbor)) {
         continue;
       }

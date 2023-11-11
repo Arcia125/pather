@@ -1,8 +1,8 @@
 var c = Object.defineProperty;
-var l = (i, s, t) => s in i ? c(i, s, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[s] = t;
-var n = (i, s, t) => (l(i, typeof s != "symbol" ? s + "" : s, t), t);
+var l = (i, t, s) => t in i ? c(i, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : i[t] = s;
+var n = (i, t, s) => (l(i, typeof t != "symbol" ? t + "" : t, s), s);
 class r {
-  constructor(s = null, t) {
+  constructor(t = null, s) {
     /**
      * movement cost to move from the starting point to this node
      */
@@ -11,12 +11,12 @@ class r {
      * estimated movement cost  to move from this node to the end
      */
     n(this, "h", 0);
-    n(this, "equals", (s) => r.equals(this, s));
-    this.parent = s, this.position = t;
+    n(this, "equals", (t) => r.equals(this, t));
+    this.parent = t, this.position = s;
   }
-  static equals(s, t) {
+  static equals(t, s) {
     var e, o, h, a;
-    return !s.position || !t.position ? !1 : ((e = s.position) == null ? void 0 : e.x) === ((o = t.position) == null ? void 0 : o.x) && ((h = s.position) == null ? void 0 : h.y) === ((a = t.position) == null ? void 0 : a.y);
+    return !t.position || !s.position ? !1 : ((e = t.position) == null ? void 0 : e.x) === ((o = s.position) == null ? void 0 : o.x) && ((h = t.position) == null ? void 0 : h.y) === ((a = s.position) == null ? void 0 : a.y);
   }
   /**
    * total cost (g + h)
@@ -26,35 +26,35 @@ class r {
   }
 }
 const p = (i) => {
-  const s = [];
-  let t = i;
-  for (; t.parent; )
-    s.push(t), t = t.parent;
-  return s;
-}, u = (i, s = !1) => {
-  const t = i.position.x, e = i.position.y;
+  const t = [];
+  let s = i;
+  for (; s.parent; )
+    t.push(s), s = s.parent;
+  return t;
+}, u = (i, t = !1) => {
+  const s = i.position.x, e = i.position.y;
   let o = [
     { x: 0, y: -1 },
     { x: 0, y: 1 },
     { x: -1, y: 0 },
     { x: 1, y: 0 }
   ];
-  return s && (o = o.concat([
+  return t && (o = o.concat([
     { x: -1, y: -1 },
     { x: 1, y: -1 },
     { x: -1, y: 1 },
     { x: 1, y: 1 }
   ])), o.map((h) => new r(i, {
-    x: t + h.x,
+    x: s + h.x,
     y: e + h.y
   }));
 }, f = {
-  DEFAULT: (i, s) => Math.abs(i.position.x - s.position.x) + Math.abs(i.position.y - s.position.y)
+  DEFAULT: (i, t) => Math.abs(i.position.x - t.position.x) + Math.abs(i.position.y - t.position.y)
 }, d = {
-  DEFAULT: (i, s) => i.equals(s)
+  DEFAULT: (i, t) => i.equals(t)
 }, x = 99999;
 class N {
-  constructor(s) {
+  constructor(t) {
     /**
      * Open list of nodes to be checked
      */
@@ -71,38 +71,42 @@ class N {
      * Destination node
      */
     n(this, "end");
+    n(this, "iterations");
     n(this, "config");
     n(this, "findPath", () => {
       for (; this.possibleNodes.length; ) {
-        const s = this.checkNode();
-        if (s != null && s.path)
-          return s.path;
+        if (this.iterations >= this.config.maxIterations)
+          return;
+        const t = this.checkNode();
+        if (t != null && t.path)
+          return t.path;
+        this.iterations++;
       }
     });
     n(this, "checkNode", () => {
       this.possibleNodes.sort((e, o) => o.f - e.f);
-      const s = this.possibleNodes.pop();
-      if (!s)
+      const t = this.possibleNodes.pop();
+      if (!t)
         return;
-      if (this.checkedNodes.push(s), this.config.isDone(s, this.end))
+      if (this.checkedNodes.push(t), this.config.isDone(t, this.end))
         return {
-          path: p(s).reverse()
+          path: p(t).reverse()
         };
-      const t = u(s, this.config.diagonal);
-      for (let e of t)
-        this.config.wouldCollide(e) || this.possibleNodes.filter((o) => o.equals(e)).length > 0 || this.checkedNodes.filter((o) => o.equals(e)).length > 0 || (e.g = s.g + 1, e.h = this.config.heuristic(e, this.end), this.possibleNodes.push(e));
+      const s = u(t, this.config.diagonal);
+      for (let e of s)
+        this.config.wouldCollide(e) || this.possibleNodes.filter((o) => o.equals(e)).length > 0 || this.checkedNodes.filter((o) => o.equals(e)).length > 0 || (e.g = t.g + 1, e.h = this.config.heuristic(e, this.end), this.possibleNodes.push(e));
     });
     this.config = {
-      ...s,
-      heuristic: s.heuristic || f.DEFAULT,
-      diagonal: s.diagonal || !1,
-      maxIterations: s.maxIterations || x,
-      isDone: s.isDone || d.DEFAULT
-    }, this.start = new r(null, s.startPos), this.end = new r(null, s.endPos), this.possibleNodes.push(this.start);
+      ...t,
+      heuristic: t.heuristic || f.DEFAULT,
+      diagonal: t.diagonal || !1,
+      maxIterations: t.maxIterations || x,
+      isDone: t.isDone || d.DEFAULT
+    }, this.iterations = 0, this.start = new r(null, t.startPos), this.end = new r(null, t.endPos), this.possibleNodes.push(this.start);
   }
 }
-const g = (...i) => new N(...i).findPath();
+const y = (...i) => new N(...i).findPath();
 export {
   r as PathNode,
-  g as findPath
+  y as findPath
 };

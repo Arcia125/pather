@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pather</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900" />
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #main-demo-canvas {
+        width: 100%;
+      }
+      #app {
+        position: relative;
+      }
+
+      #reset-button {
+
+      }
+      #start-button {
+        /* position: relative;
+        bottom: 100px; */
+      }
+      .actions {
+        position: relative;
+        bottom: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="main-demo-canvas">
+        You need javascript to run this app.
+        <!-- <button id="-button">Start</button> -->
+      </canvas>
+      <div class="actions">
+        <button id="reset-button">Reset</button>
+        <button id="start-button">Start</button>
+        <button id="place-start-button">Place Start</button>
+        <button id="place-end-button">Place End</button>
+        <button id="clear-button">Clear</button>
+      </div>
+    </div>
+    <script type="module" src="/lib/demo.ts"></script>
+  </body>
+</html>

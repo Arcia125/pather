@@ -39,6 +39,7 @@ export declare class AStar {
      * Destination node
      */
     end: PathNode;
+    private iterations;
     config: Required<AStarParams>;
     constructor(config: AStarParams);
     findPath: () => PathNode[] | undefined;

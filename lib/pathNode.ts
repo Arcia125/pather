@@ -30,4 +30,20 @@ export class PathNode {
   public get f() {
     return this.g + this.h;
   }
+
+  public get x() {
+    return this.position.x;
+  }
+
+  public set x(value: number) {
+    this.position.x = value;
+  }
+
+  public get y() {
+    return this.position.y;
+  }
+
+  public set y(value: number) {
+    this.position.y = value;
+  }
 }
