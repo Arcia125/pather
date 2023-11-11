@@ -7,7 +7,7 @@ export class PathNode {
     if (!nodeA.position || !nodeB.position) {
       return false;
     }
-    return nodeA.position?.x === nodeB.position?.x && nodeA.position?.y === nodeB.position?.y;
+    return nodeA.x === nodeB.x && nodeA.y === nodeB.y;
   }
 
   /**

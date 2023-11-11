@@ -11,8 +11,8 @@ export const backtrace = (node: PathNode) => {
 };
 
 export const getNeigbors = (node: PathNode, diagonal: boolean = false) => {
-  const x = node.position.x;
-  const y = node.position.y;
+  const x = node.x;
+  const y = node.y;
   let dirs = [
     { x: 0, y: -1 },
     { x: 0, y: 1 },

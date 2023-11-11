@@ -89,7 +89,7 @@ const state: {
   pathIndex,
   possibleIndex: 0,
   checkedIndex: 0,
-  speed: 0.5,
+  speed: 0.01,
   placing: CELLS.WALL,
   grid: getInitialGrid()
 };
@@ -99,8 +99,8 @@ const createSearch = () => {
     startPos: findCell(CELLS.START),
     endPos: findCell(CELLS.END),
     // diagonal: true,
-    wouldCollide: (node) => state.grid[node.position.y][node.position.x] === 1,
-    isOutOfBounds: (node) => typeof (state.grid?.[node.position.y]?.[node.position.x]) === 'undefined',
+    wouldCollide: (node) => state.grid[node.y][node.x] === 1,
+    isOutOfBounds: (node) => typeof (state.grid?.[node.y]?.[node.x]) === 'undefined',
   });
 };
 

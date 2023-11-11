@@ -18,7 +18,7 @@ export type FUNCTIONS = {
 };
 
 export const HEURISTIC_FUNCS: Record<'DEFAULT', FUNCTIONS['HEURISTIC']> = {
-  DEFAULT: (node, endNode) => Math.abs(node.position.x - endNode.position.x) + Math.abs(node.position.y - endNode.position.y),
+  DEFAULT: (node, endNode) => Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y),
 };
 
 export const IS_DONE_FUNCS: Record<'DEFAULT', FUNCTIONS['IS_DONE']> = {

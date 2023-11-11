@@ -12,8 +12,8 @@ test('Finds a path correctly', () => {
   const path = findPath({
     startPos: { x: 1, y: 1 },
     endPos: { x: 3, y: 3 },
-    isOutOfBounds: (node) => typeof (testGrid?.[node.position.y]?.[node.position.x]) === 'undefined',
-    wouldCollide: (node) => testGrid[node.position.y][node.position.x] === 1,
+    isOutOfBounds: (node) => typeof (testGrid?.[node.y]?.[node.x]) === 'undefined',
+    wouldCollide: (node) => testGrid[node.y][node.x] === 1,
   });
 
   expect(path?.[0].position).toStrictEqual({ x: 2, y: 1 });
