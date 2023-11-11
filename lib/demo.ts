@@ -110,7 +110,7 @@ let search = createSearch();
 
 state.path = search.findPath();
 
-const update = (timeStamp: number) => {
+const update = (_timeStamp: number) => {
   if (!state.path) {
     return;
   }

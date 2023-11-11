@@ -17,4 +17,8 @@ export declare class PathNode {
      * total cost (g + h)
      */
     get f(): number;
+    get x(): number;
+    set x(value: number);
+    get y(): number;
+    set y(value: number);
 }
