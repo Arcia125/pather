@@ -22,11 +22,11 @@ const grid = [
 ]
 
 findPath({
-    startPos: { x: 0, y: 0 },
-    endPos: { x: 4, y: 4 },
-    // diagonal: true,
-    wouldCollide: (node) => grid[node.y][node.x] === 1,
-    isOutOfBounds: (node) => typeof (grid?.[node.y]?.[node.x]) === 'undefined',
-  });
+  startPos: { x: 0, y: 0 },
+  endPos: { x: 4, y: 4 },
+  // diagonal: true,
+  wouldCollide: (node) => grid[node.y][node.x] === 1,
+  isOutOfBounds: (node) => typeof (grid?.[node.y]?.[node.x]) === 'undefined',
+});
 
 ```
