@@ -119,6 +119,32 @@ export class AStar {
     }
   };
 
+  public *findPathGen() {
+    if (this.iterations !== 0) {
+      const { start, end, iterations, possibleNodes, checkedNodes } = this.initialState();
+      this.possibleNodes = possibleNodes;
+      this.checkedNodes = checkedNodes;
+      this.start = start;
+      this.end = end;
+      this.iterations = iterations;
+    }
+    while (this.possibleNodes.length) {
+      if (this.iterations >= this.config.maxIterations) {
+        return;
+      }
+      const solution = this.checkNode();
+      this.iterations++;
+      yield {
+        solution,
+        aStar: this,
+      };
+
+      if (solution?.path) {
+        return;
+      }
+    }
+  }
+
   private checkNode = () => {
     this.possibleNodes.sort((a, b) => b.f - a.f);
     const currentNode = this.possibleNodes.pop();

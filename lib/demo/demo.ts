@@ -108,37 +108,53 @@ const createSearch = () => {
   });
 };
 
+let astar = createSearch();
+let gen = astar.findPathGen();
+let search = gen.next();
+let solution = search.value?.solution;
 
-let search = createSearch();
 
-
-state.path = search.findPath();
 
 const reset = () => {
   state.pathIndex = 0;
   state.possibleIndex = 0;
   state.checkedIndex = 0;
   state.running = false;
-  search = createSearch();
-  state.path = search.findPath();
+  astar = createSearch();
+  gen = astar.findPathGen();
+  search = gen.next();
 };
 
+let lastUpdate = 0;
 const update = (_timeStamp: number) => {
-  if (!state.path) {
-    return;
-  }
-  state.checkedIndex += state.time.delta * state.speed;
-  if (state.checkedIndex > search.checkedNodes.length) {
-    state.checkedIndex = search.checkedNodes.length
-    state.possibleIndex += state.time.delta * state.speed;
-    if (state.possibleIndex > search.possibleNodes.length) {
-      state.possibleIndex = search.possibleNodes.length
-      state.pathIndex += state.time.delta * state.speed;
-      if (state.pathIndex > state.path?.length) {
-        state.pathIndex = state.path?.length;
+
+  if (!search.done) {
+
+    if (Math.abs(_timeStamp - lastUpdate) > 300) {
+      let temp = gen.next();
+      if (!temp.done) {
+        search = temp;
       }
+      lastUpdate = _timeStamp;
     }
   }
+  if (!search.done && search.value) {
+    solution = search.value?.solution;
+  }
+
+  // state.checkedIndex += state.time.delta * state.speed;
+  // if (state.checkedIndex > search.value.aStar.checkedNodes.length) {
+  //   state.checkedIndex = search.value.aStar.checkedNodes.length
+  //   state.possibleIndex += state.time.delta * state.speed;
+  //   if (state.possibleIndex > search.value.aStar.possibleNodes.length) {
+  //     state.possibleIndex = search.value.aStar.possibleNodes.length
+  //     state.pathIndex += state.time.delta * state.speed;
+  //     if (typeof solution === 'undefined' || !solution.path) return;
+  //     if (state.pathIndex > solution.path?.length) {
+  //       state.pathIndex = solution.path?.length;
+  //     }
+  //   }
+  // }
 };
 
 const resetDelta = () => {
@@ -215,36 +231,28 @@ const drawPath = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
 
 const drawSearch = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
   let possibleIndex = 0;
-  for (let node of search.possibleNodes) {
+  for (let node of search.value.aStar.possibleNodes) {
     if (!node) {
       continue;
-    }
-    if (possibleIndex >= state.possibleIndex) {
-      break;
     }
     drawCell(ctx, canvas, {
       x: node.x,
       y: node.y,
       fill: COLORS.POSSIBLE,
     });
-    possibleIndex++;
   }
 
   let checkedIndex = 0;
-  for (let node of search.checkedNodes) {
+  for (let node of search.value.aStar.checkedNodes) {
     if (!node) {
       continue;
     }
 
-    if (checkedIndex >= state.checkedIndex) {
-      break;
-    }
     drawCell(ctx, canvas, {
       x: node.x,
       y: node.y,
       fill: COLORS.CHECKED,
     });
-    checkedIndex++;
   }
 };
 
@@ -258,7 +266,7 @@ const render = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
   ctx.fillStyle = '#000';
   drawGrid(ctx, canvas);
   drawSearch(ctx, canvas);
-  drawPath(ctx, canvas);
+  // drawPath(ctx, canvas);
   drawStartPos(ctx, canvas);
   drawEndPos(ctx, canvas);
 };
