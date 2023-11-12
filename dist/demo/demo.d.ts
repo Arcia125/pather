@@ -1,6 +1,7 @@
 import { AStar } from '../AStar';
 import { PathNode } from '../pathNode';
 import { CELLS } from './constants';
+import { Position } from '../models';
 declare const time: {
     lastFrameTimeMs: number;
     maxFPS: number;
@@ -22,6 +23,7 @@ export declare const state: {
     diagonal: boolean;
     placing: typeof CELLS[keyof typeof CELLS];
     grid: number[][];
+    mousePos: Position;
 };
 declare let gen: Generator<{
     solution: {

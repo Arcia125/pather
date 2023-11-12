@@ -1,4 +1,5 @@
 export declare const COLORS: {
+    NOTHING: string;
     START: string;
     END: string;
     PATH: string;
