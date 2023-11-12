@@ -21,16 +21,28 @@ body {
   border-radius: 6px;
 }
 .actions {
+  position: absolute;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
-  bottom: 100px;
+  bottom: 24px;
+  left: calc(50vw - 831px / 2);
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
 }
 .actions > *:not(:first-child) {
   margin-left: 12px;
+}
+
+@media screen and (max-width: 900px) {
+  .actions {
+    flex-direction: column;
+    left: calc(50vw - 162px / 2);
+  }
+  .actions > *:not(:first-child) {
+    margin-left: 0;
+    margin-top: 12px;
+  }
 }
 button {
   outline: none;
@@ -52,5 +64,4 @@ button:active {
 }
 button:focus {
   outline: 3px solid #b794f6;
-
 }
