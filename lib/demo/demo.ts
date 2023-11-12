@@ -1,7 +1,7 @@
 import { AStar } from '../AStar';
 import { PathNode } from '../pathNode';
-import { ActionButton } from './ActionButton';
-import { ActionCheckbox } from './ActionCheckbox';
+import { ActionButton, ActionCheckbox } from './dom';
+import './demo.css';
 
 const COLORS = {
   START: '#05998c',
@@ -9,7 +9,7 @@ const COLORS = {
   PATH: '#b3e0dc',
   CHECKED: '#5C9905',
   POSSIBLE: '#420599',
-  WALL: '#000',
+  WALL: '#0f0f0f',
   GRID: '#025043'
 };
 
@@ -80,8 +80,6 @@ const state: {
   running: boolean;
   path?: PathNode[] | undefined;
   pathIndex: number;
-  possibleIndex: number;
-  checkedIndex: number;
   speed: number;
   diagonal: boolean;
   placing: typeof CELLS[keyof typeof CELLS];
@@ -90,8 +88,6 @@ const state: {
   time,
   running,
   pathIndex,
-  possibleIndex: 0,
-  checkedIndex: 0,
   speed: 0.01,
   diagonal: false,
   placing: CELLS.WALL,
@@ -108,21 +104,31 @@ const createSearch = () => {
   });
 };
 
-let astar = createSearch();
-let gen = astar.findPathGen();
-let search = gen.next();
+let aStar = createSearch();
+let gen = aStar.findPathGen();
+let search: ReturnType<typeof gen.next> = {
+  done: false,
+  value: {
+    aStar,
+    solution: undefined
+  }
+};
 let solution = search.value?.solution;
 
 
 
 const reset = () => {
   state.pathIndex = 0;
-  state.possibleIndex = 0;
-  state.checkedIndex = 0;
   state.running = false;
-  astar = createSearch();
-  gen = astar.findPathGen();
-  search = gen.next();
+  aStar = createSearch();
+  gen = aStar.findPathGen();
+  search = {
+    done: false,
+    value: {
+      aStar,
+      solution: undefined
+    }
+  };
 };
 
 let lastUpdate = 0;
@@ -130,31 +136,23 @@ const update = (_timeStamp: number) => {
 
   if (!search.done) {
 
-    if (Math.abs(_timeStamp - lastUpdate) > 300) {
+    if (Math.abs(_timeStamp - lastUpdate) > 100) {
       let temp = gen.next();
       if (!temp.done) {
         search = temp;
+        lastUpdate = _timeStamp;
       }
-      lastUpdate = _timeStamp;
     }
   }
   if (!search.done && search.value) {
     solution = search.value?.solution;
   }
 
-  // state.checkedIndex += state.time.delta * state.speed;
-  // if (state.checkedIndex > search.value.aStar.checkedNodes.length) {
-  //   state.checkedIndex = search.value.aStar.checkedNodes.length
-  //   state.possibleIndex += state.time.delta * state.speed;
-  //   if (state.possibleIndex > search.value.aStar.possibleNodes.length) {
-  //     state.possibleIndex = search.value.aStar.possibleNodes.length
-  //     state.pathIndex += state.time.delta * state.speed;
-  //     if (typeof solution === 'undefined' || !solution.path) return;
-  //     if (state.pathIndex > solution.path?.length) {
-  //       state.pathIndex = solution.path?.length;
-  //     }
-  //   }
-  // }
+  if (solution && solution.path && state.pathIndex < solution.path.length && Math.abs(_timeStamp - lastUpdate) > (100 / 2)) {
+    state.path = solution.path;
+    state.pathIndex++;
+    lastUpdate = _timeStamp;
+  }
 };
 
 const resetDelta = () => {
@@ -230,8 +228,7 @@ const drawPath = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
 };
 
 const drawSearch = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-  let possibleIndex = 0;
-  for (let node of search.value.aStar.possibleNodes) {
+  for (let node of (search.value?.aStar.possibleNodes || [])) {
     if (!node) {
       continue;
     }
@@ -242,8 +239,7 @@ const drawSearch = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) =>
     });
   }
 
-  let checkedIndex = 0;
-  for (let node of search.value.aStar.checkedNodes) {
+  for (let node of (search.value?.aStar.checkedNodes || [])) {
     if (!node) {
       continue;
     }
@@ -266,7 +262,7 @@ const render = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
   ctx.fillStyle = '#000';
   drawGrid(ctx, canvas);
   drawSearch(ctx, canvas);
-  // drawPath(ctx, canvas);
+  drawPath(ctx, canvas);
   drawStartPos(ctx, canvas);
   drawEndPos(ctx, canvas);
 };
@@ -354,9 +350,11 @@ const start = () => {
 
   });
 
-  new ActionCheckbox('#diagonal-checkbox', (event) => {
+  const diagonalCheckbox = new ActionCheckbox('#diagonal-checkbox', (event) => {
     state.diagonal = (event.target as HTMLInputElement).checked;
-  })
+  });
+
+  diagonalCheckbox.element.checked = state.diagonal;
 
   if (!ctx) {
     throw new Error('no context found');
