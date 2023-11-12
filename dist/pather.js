@@ -15,8 +15,7 @@ class r {
     this.parent = t, this.position = s;
   }
   static equals(t, s) {
-    var i, o, h, a;
-    return !t.position || !s.position ? !1 : ((i = t.position) == null ? void 0 : i.x) === ((o = s.position) == null ? void 0 : o.x) && ((h = t.position) == null ? void 0 : h.y) === ((a = s.position) == null ? void 0 : a.y);
+    return !t.position || !s.position ? !1 : t.x === s.x && t.y === s.y;
   }
   /**
    * total cost (g + h)
@@ -37,14 +36,14 @@ class r {
     this.position.y = t;
   }
 }
-const p = (e) => {
+const d = (e) => {
   const t = [];
   let s = e;
   for (; s.parent; )
     t.push(s), s = s.parent;
   return t;
 }, u = (e, t = !1) => {
-  const s = e.position.x, i = e.position.y;
+  const s = e.x, i = e.y;
   let o = [
     { x: 0, y: -1 },
     { x: 0, y: 1 },
@@ -60,12 +59,12 @@ const p = (e) => {
     x: s + h.x,
     y: i + h.y
   }));
-}, d = {
-  DEFAULT: (e, t) => Math.abs(e.position.x - t.position.x) + Math.abs(e.position.y - t.position.y)
+}, p = {
+  DEFAULT: (e, t) => Math.abs(e.x - t.x) + Math.abs(e.y - t.y)
 }, f = {
   DEFAULT: (e, t) => e.equals(t)
 }, N = 99999;
-class x {
+class g {
   constructor(t) {
     /**
      * Open list of nodes to be checked
@@ -87,7 +86,7 @@ class x {
     n(this, "config");
     n(this, "initialState", () => {
       const s = new r(null, this.config.startPos), i = new r(null, this.config.endPos), o = [], h = [];
-      return o.push(this.start), {
+      return o.push(s), {
         iterations: 0,
         start: s,
         end: i,
@@ -116,7 +115,7 @@ class x {
         return;
       if (this.checkedNodes.push(t), this.config.isDone(t, this.end))
         return {
-          path: p(t).reverse()
+          path: d(t).reverse()
         };
       const s = u(t, this.config.diagonal);
       for (let i of s)
@@ -124,7 +123,7 @@ class x {
     });
     this.config = {
       ...t,
-      heuristic: t.heuristic || d.DEFAULT,
+      heuristic: t.heuristic || p.DEFAULT,
       diagonal: t.diagonal || !1,
       maxIterations: t.maxIterations || N,
       isDone: t.isDone || f.DEFAULT
@@ -132,8 +131,24 @@ class x {
     const { start: s, end: i, iterations: o, possibleNodes: h, checkedNodes: a } = this.initialState();
     this.possibleNodes = h, this.checkedNodes = a, this.start = s, this.end = i, this.iterations = o;
   }
+  *findPathGen() {
+    if (this.iterations !== 0) {
+      const { start: t, end: s, iterations: i, possibleNodes: o, checkedNodes: h } = this.initialState();
+      this.possibleNodes = o, this.checkedNodes = h, this.start = t, this.end = s, this.iterations = i;
+    }
+    for (; this.possibleNodes.length; ) {
+      if (this.iterations >= this.config.maxIterations)
+        return;
+      const t = this.checkNode();
+      if (this.iterations++, yield {
+        solution: t,
+        aStar: this
+      }, t != null && t.path)
+        return;
+    }
+  }
 }
-const y = (...e) => new x(...e).findPath();
+const y = (...e) => new g(...e).findPath();
 export {
   r as PathNode,
   y as findPath
