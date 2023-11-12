@@ -1,3 +1,4 @@
+import { cellToColor } from './cellToColor';
 import { CELLS, COLORS } from './constants';
 import { state, search } from './demo';
 import { findCell } from './findCell';
@@ -93,6 +94,22 @@ const drawSearch = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) =>
   }
 };
 
+const drawPlacing = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+  const cellSize = getCellSize(canvas);
+  const coordSystemPos = {
+    x: Math.floor(state.mousePos.x / cellSize),
+    y: Math.floor(state.mousePos.y / cellSize)
+  };
+
+
+  const color = cellToColor(state.placing);
+  drawCell(ctx, canvas, {
+    x: coordSystemPos.x,
+    y: coordSystemPos.y,
+    fill: `${color}bf`
+  });
+};
+
 export const render = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
   ctx.beginPath();
   ctx.fillStyle = '#fff';
@@ -106,4 +123,5 @@ export const render = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement)
   drawPath(ctx, canvas);
   drawStartPos(ctx, canvas);
   drawEndPos(ctx, canvas);
+  drawPlacing(ctx, canvas);
 };

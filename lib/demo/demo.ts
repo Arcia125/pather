@@ -6,6 +6,7 @@ import { CELLS } from './constants';
 import { findCell } from './findCell';
 import { getCellSize } from './getCellSize';
 import { render } from './render';
+import { Position } from '../models';
 
 const time = {
   lastFrameTimeMs: 0,
@@ -58,6 +59,7 @@ export const state: {
   diagonal: boolean;
   placing: typeof CELLS[keyof typeof CELLS];
   grid: number[][];
+  mousePos: Position;
 } = {
   time,
   running,
@@ -65,7 +67,11 @@ export const state: {
   speed: 100,
   diagonal: false,
   placing: CELLS.WALL,
-  grid: getInitialGrid()
+  grid: getInitialGrid(),
+  mousePos: {
+    x: 0,
+    y: 0,
+  },
 };
 
 const createSearch = () => {
@@ -271,6 +277,10 @@ const start = () => {
     };
 
     if (state.placing === CELLS.WALL) {
+      const irreplaceableCells = [CELLS.START, CELLS.END] as (typeof CELLS[keyof typeof CELLS])[];
+      if (irreplaceableCells.includes(state.grid[coordSystemPos.y][coordSystemPos.x] as typeof CELLS[keyof typeof CELLS])) {
+        return;
+      }
       state.grid[coordSystemPos.y][coordSystemPos.x] = state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.WALL ? CELLS.NOTHING : CELLS.WALL;
     } else {
       const prevCell = findCell(state.placing);
@@ -286,6 +296,20 @@ const start = () => {
     }
     reset();
   });
+
+  canvas.addEventListener('mousemove', (e) => {
+    const canvasRect = canvas.getBoundingClientRect();
+    const mousePos = {
+      x: e.clientX - canvasRect.left,
+      y: e.clientY - canvasRect.top
+    };
+
+
+
+    state.mousePos = mousePos;
+    console.log(state);
+
+  })
 
   mainLoop(ctx, canvas);
 };

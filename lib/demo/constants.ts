@@ -1,4 +1,5 @@
 export const COLORS = {
+  NOTHING: '#fff',
   START: '#05998c',
   END: '#990512',
   PATH: '#b3e0dc',
