@@ -27,7 +27,6 @@ body {
   justify-content: center;
   align-items: center;
   bottom: 24px;
-  left: calc(50vw - 831px / 2);
   width: fit-content;
 }
 .actions > *:not(:first-child) {
@@ -37,7 +36,6 @@ body {
 @media screen and (max-width: 900px) {
   .actions {
     flex-direction: column;
-    left: calc(50vw - 162px / 2);
   }
   .actions > *:not(:first-child) {
     margin-left: 0;

@@ -186,10 +186,7 @@ const mainLoop = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
   __gameLoop(1);
 };
 
-
-const start = () => {
-  const canvas = document.querySelector('#main-demo-canvas') as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d');
+const registerDomEvents = () => {
   new ActionButton('#reset-button', () => {
     reset();
   });
@@ -224,6 +221,13 @@ const start = () => {
   new ActionInput('#speed-slider', (event) => {
     state.speed = 1000 - parseInt((event.target as HTMLInputElement).value);
   }).element.value = `${1000 - state.speed}`;
+};
+
+
+const start = () => {
+  const canvas = document.querySelector('#main-demo-canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  registerDomEvents();
 
   if (!ctx) {
     throw new Error('no context found');
@@ -242,6 +246,9 @@ const start = () => {
     (ctx as any).msImageSmoothingEnabled = false;
     (ctx as any).mozImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
+
+    const actions = document.querySelector<HTMLDivElement>('.actions');
+    actions!.style.left = `calc(50vw - ${actions?.offsetWidth}px / 2)`;
   };
 
   resize();
