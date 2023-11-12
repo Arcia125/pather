@@ -3,7 +3,8 @@
 Pather is a typed pathfinding library designed for 2D games that eliminates the need for a matrix or grid input.
 
 ## Demo
-To experience the interactive demo, run the following command:
+To view the interactive demo visit: https://arcia125.github.io/pather/
+or run the following command to view it locally:
 ```bash
 npm run dev
 ```
