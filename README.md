@@ -1,10 +1,9 @@
 # Pather
 
-Pather is a typed pathfinding library designed for 2D games that eliminates the need for a matrix or grid input.
+Pather is a versatile and typed pathfinding library designed for 2D games, offering the convenience of pathfinding without the need for a matrix or grid input.
 
 ## Demo
-To view the interactive demo visit: https://arcia125.github.io/pather/
-or run the following command to view it locally:
+Explore the interactive demo on the [Pather Demo Page](https://arcia125.github.io/pather/) or run the following command to experience it locally:
 ```bash
 npm run dev
 ```
@@ -25,7 +24,9 @@ const grid = [
 findPath({
   startPos: { x: 0, y: 0 },
   endPos: { x: 4, y: 4 },
-  // diagonal: true,
+  // diagonal?: true,
+  // heuristic?: (node, endNode) => number,
+  // isDone?: (node, endNode) => boolean,
   wouldCollide: (node) => grid[node.y][node.x] === 1,
   isOutOfBounds: (node) => typeof (grid?.[node.y]?.[node.x]) === 'undefined',
 });
@@ -34,6 +35,7 @@ findPath({
 ## Features
 
 - **Matrix-Free Pathfinding**: Pather simplifies pathfinding in 2D games by eliminating the need for a matrix or grid input.
+- **Interactive Demo**: Visualize and experiment with Pather's capabilities through the [online demo](https://arcia125.github.io/pather/).
 
 ## API
 
@@ -49,6 +51,8 @@ Finds the path between the start and end positions based on the specified option
   - `diagonal`: (Optional) Whether diagonal movement is allowed.
   - `wouldCollide`: Function to check if a node would collide with obstacles.
   - `isOutOfBounds`: Function to check if a node is out of bounds.
+  - `heuristic`: (Optional) Custom heuristic function for path evaluation.
+  - `isDone`: (Optional) Custom function to check if the destination is reached.
 
 #### Returns
 
@@ -57,7 +61,7 @@ Finds the path between the start and end positions based on the specified option
 
 ## Installation
 
-To use Pather in your project, install it via npm:
+To integrate Pather into your project, install it via npm:
 
 ```bash
 npm install @arcia125/pather
@@ -65,4 +69,4 @@ npm install @arcia125/pather
 
 ## License
 
-Pather is open-source software licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Pather is open-source software licensed under the MIT License. Refer to the [LICENSE](LICENSE) file for details.
