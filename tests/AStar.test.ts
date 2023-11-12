@@ -1,9 +1,10 @@
+
+
 import { describe, expect, it } from 'vitest';
-import { findPath } from '../lib/findPath';
-import { FUNCTIONS } from '../lib/AStar';
+import { AStar, FUNCTIONS } from '../lib/AStar';
 import { Position } from '../lib/models';
 
-describe('findPath', () => {
+describe('AStar', () => {
   const grid = [
     [0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0],
@@ -35,14 +36,39 @@ describe('findPath', () => {
     heuristic,
   };
 
-  it('should find a path using findPath function', () => {
-    const path = findPath(aStarParams);
+  it('should find a path', () => {
+    const aStar = new AStar(aStarParams);
+    const path = aStar.findPath();
     expect(path).toBeTruthy();
+  });
+
+  it('should generate path solutions using generator', () => {
+    const aStar = new AStar(aStarParams);
+    const generator = aStar.findPathGen();
+    let next = generator.next();
+    while (!next.done) {
+      const solution = next.value;
+      expect(solution).toBeTruthy();
+      expect(solution.aStar).toBeInstanceOf(AStar);
+      next = generator.next();
+    }
   });
 
   it('should return undefined if no path is found', () => {
     const invalidParams = { ...aStarParams, endPos: { x: 10, y: 10 } };
-    const path = findPath(invalidParams);
+    const aStar = new AStar(invalidParams);
+    const path = aStar.findPath();
     expect(path).toBeUndefined();
+  });
+
+  it('should handle custom heuristic and isDone functions', () => {
+    const customParams = {
+      ...aStarParams,
+      heuristic: (node, endNode) => 2 * heuristic(node, endNode),
+      isDone: (node, endNode) => !isDone(node, endNode),
+    };
+    const aStar = new AStar(customParams);
+    const path = aStar.findPath();
+    expect(path).toBeTruthy();
   });
 });
