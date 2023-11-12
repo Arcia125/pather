@@ -1,4 +1,4 @@
-export class ActionCheckbox {
+export class ActionInput {
   public element: HTMLInputElement;
   public constructor(selector: string, handler: (ev: Event) => void) {
     this.element = document.querySelector(selector) as HTMLInputElement;

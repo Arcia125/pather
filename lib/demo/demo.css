@@ -21,13 +21,16 @@ body {
   border-radius: 6px;
 }
 .actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   bottom: 100px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
 }
-.actions button:not(:first-child) {
-  margin-left: 5px;
+.actions > *:not(:first-child) {
+  margin-left: 12px;
 }
 button {
   outline: none;

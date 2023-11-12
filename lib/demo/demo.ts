@@ -1,6 +1,6 @@
 import { AStar } from '../AStar';
 import { PathNode } from '../pathNode';
-import { ActionButton, ActionCheckbox } from './dom';
+import { ActionButton, ActionInput } from './dom';
 import './demo.css';
 
 const COLORS = {
@@ -136,7 +136,7 @@ const update = (_timeStamp: number) => {
 
   if (!search.done) {
 
-    if (Math.abs(_timeStamp - lastUpdate) > 100) {
+    if (Math.abs(_timeStamp - lastUpdate) > state.speed) {
       let temp = gen.next();
       if (!temp.done) {
         search = temp;
@@ -148,7 +148,7 @@ const update = (_timeStamp: number) => {
     solution = search.value?.solution;
   }
 
-  if (solution && solution.path && state.pathIndex < solution.path.length && Math.abs(_timeStamp - lastUpdate) > (100 / 2)) {
+  if (solution && solution.path && state.pathIndex < solution.path.length && Math.abs(_timeStamp - lastUpdate) > (state.speed / 2)) {
     state.path = solution.path;
     state.pathIndex++;
     lastUpdate = _timeStamp;
@@ -350,8 +350,12 @@ const start = () => {
 
   });
 
-  const diagonalCheckbox = new ActionCheckbox('#diagonal-checkbox', (event) => {
+  const diagonalCheckbox = new ActionInput('#diagonal-checkbox', (event) => {
     state.diagonal = (event.target as HTMLInputElement).checked;
+  });
+
+  new ActionInput('#speed-slider', (event) => {
+    state.speed = 1000 - parseInt((event.target as HTMLInputElement).value);
   });
 
   diagonalCheckbox.element.checked = state.diagonal;
