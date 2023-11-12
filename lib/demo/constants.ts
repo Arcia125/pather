@@ -1,14 +1,13 @@
 export const COLORS = {
-  NOTHING: '#fff',
-  START: '#05998c',
-  END: '#990512',
-  PATH: '#b3e0dc',
-  CHECKED: '#5C9905',
-  POSSIBLE: '#420599',
-  WALL: '#0f0f0f',
-  GRID: '#025043'
+  NOTHING: '#ffffff',
+  START: '#00b894',
+  END: '#d63031',
+  PATH: '#00cec9',
+  CHECKED: '#4CAF50',
+  POSSIBLE: '#8e44ad',
+  WALL: '#2d3436',
+  GRID: '#00b894'
 };
-
 
 export const CELLS = {
   NOTHING: 0,

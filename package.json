@@ -43,5 +43,9 @@
     "astar",
     "typescript"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arcia125/pather"
+  },
   "homepage": "https://arcia125.github.io/pather/"
 }
