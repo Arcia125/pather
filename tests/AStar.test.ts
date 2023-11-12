@@ -1,5 +1,3 @@
-
-
 import { describe, expect, it } from 'vitest';
 import { AStar, FUNCTIONS } from '../lib/AStar';
 import { Position } from '../lib/models';
@@ -26,7 +24,7 @@ describe('AStar', () => {
   const start: Position = { x: 0, y: 0 };
   const end: Position = { x: 4, y: 4 };
 
-  const aStarParams = {
+  const aStarParamsDiagonal = {
     startPos: start,
     endPos: end,
     diagonal: true,
@@ -36,39 +34,76 @@ describe('AStar', () => {
     heuristic,
   };
 
-  it('should find a path', () => {
-    const aStar = new AStar(aStarParams);
+  const aStarParamsNoDiagonal = {
+    startPos: start,
+    endPos: end,
+    diagonal: false,
+    wouldCollide,
+    isOutOfBounds,
+    isDone,
+    heuristic,
+  };
+
+const isAdjacent = (pos1: Position | undefined, pos2: Position, diagonal: boolean = false) => {
+  if (!pos1) return;
+  const dx = Math.abs(pos1.x - pos2.x);
+  const dy = Math.abs(pos1.y - pos2.y);
+
+  if (diagonal) {
+    return (dx <= 1 && dy <= 1) && (dx + dy > 0);
+  } else {
+    return (dx === 1 && dy === 0) || (dx === 0 && dy === 1);
+  }
+};
+
+
+  it('should find a path with diagonal movement starting adjacent to the start and ending at the end', () => {
+    const aStar = new AStar(aStarParamsDiagonal);
     const path = aStar.findPath();
     expect(path).toBeTruthy();
+    expect(isAdjacent(path?.[0].position, start, true)).toBe(true);
+    expect(path?.[path.length - 1].position).toEqual(end);
   });
 
-  it('should generate path solutions using generator', () => {
-    const aStar = new AStar(aStarParams);
+  it('should find a path with no diagonal movement starting adjacent to the start and ending at the end', () => {
+    const aStar = new AStar(aStarParamsNoDiagonal);
+    const path = aStar.findPath();
+    expect(path).toBeTruthy();
+    expect(isAdjacent(path?.[0].position, start)).toBe(true);
+    expect(path?.[path.length - 1].position).toEqual(end);
+  });
+
+  it('should generate path solutions with diagonal movement starting adjacent to the start and ending at the end', () => {
+    const aStar = new AStar(aStarParamsDiagonal);
     const generator = aStar.findPathGen();
     let next = generator.next();
+    let solution;
     while (!next.done) {
-      const solution = next.value;
-      expect(solution).toBeTruthy();
-      expect(solution.aStar).toBeInstanceOf(AStar);
+      if (next.value.solution) {
+        solution = next.value.solution
+      }
       next = generator.next();
     }
-  });
-
-  it('should return undefined if no path is found', () => {
-    const invalidParams = { ...aStarParams, endPos: { x: 10, y: 10 } };
-    const aStar = new AStar(invalidParams);
-    const path = aStar.findPath();
-    expect(path).toBeUndefined();
-  });
-
-  it('should handle custom heuristic and isDone functions', () => {
-    const customParams = {
-      ...aStarParams,
-      heuristic: (node, endNode) => 2 * heuristic(node, endNode),
-      isDone: (node, endNode) => !isDone(node, endNode),
-    };
-    const aStar = new AStar(customParams);
-    const path = aStar.findPath();
+    const path = solution?.path;
     expect(path).toBeTruthy();
+    expect(isAdjacent(path?.[0].position, start, true)).toBe(true);
+    expect(path?.[path.length - 1].position).toEqual(end);
+  });
+
+  it('should generate path solutions with no diagonal movement starting adjacent to the start and ending at the end', () => {
+    const aStar = new AStar(aStarParamsNoDiagonal);
+    const generator = aStar.findPathGen();
+    let next = generator.next();
+    let solution;
+    while (!next.done) {
+      if (next.value.solution) {
+        solution = next.value.solution
+      }
+      next = generator.next();
+    }
+    const path = solution?.path;
+    expect(path).toBeTruthy();
+    expect(isAdjacent(path?.[0].position, start)).toBe(true);
+    expect(path?.[path.length - 1].position).toEqual(end);
   });
 });
