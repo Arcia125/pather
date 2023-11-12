@@ -26,7 +26,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "build:docs": "tsc --outDir ./docs && vite build --outDir ./docs --config ./demoVite.config.ts"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
