@@ -1,4 +1,4 @@
-export declare class ActionCheckbox {
+export declare class ActionInput {
     element: HTMLInputElement;
     constructor(selector: string, handler: (ev: Event) => void);
     onChange: (handler: (ev: Event) => void) => void;
