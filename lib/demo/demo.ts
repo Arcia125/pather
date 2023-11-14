@@ -25,7 +25,9 @@ let running = false;
 
 let pathIndex = 0;
 
-const getInitialGrid = () => [
+const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
+
+const getInitialMobileGrid = () => [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -49,6 +51,54 @@ const getInitialGrid = () => [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, CELLS.END],
 ];
 
+const getInitialDesktopGrid = () => [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, CELLS.START, 0, 1, 0, 1, 0, 0, CELLS.END, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+]
+const getInitialGrid = () => {
+  if (mobileMediaQuery.matches) return getInitialMobileGrid();
+  return getInitialDesktopGrid();
+};
+
 
 export const state: {
   time: typeof time;
@@ -58,20 +108,24 @@ export const state: {
   speed: number;
   diagonal: boolean;
   placing: typeof CELLS[keyof typeof CELLS];
+  dragging: typeof CELLS[keyof typeof CELLS] | null;
   grid: number[][];
   mousePos: Position;
+  mouseDown: boolean;
 } = {
   time,
   running,
   pathIndex,
-  speed: 100,
+  speed: 1,
   diagonal: false,
   placing: CELLS.WALL,
+  dragging: null,
   grid: getInitialGrid(),
   mousePos: {
     x: 0,
     y: 0,
   },
+  mouseDown: false
 };
 
 const createSearch = () => {
@@ -229,6 +283,18 @@ const registerDomEvents = () => {
   }).element.value = `${1000 - state.speed}`;
 };
 
+const defineGridToPoint = (coordSystemPos: Position) => {
+  console.log(state.grid[coordSystemPos.y].length, coordSystemPos.x);
+  if (state.grid[coordSystemPos.y].length < coordSystemPos.x) {
+    for (let i = state.grid[coordSystemPos.y].length; i < coordSystemPos.x; i++) {
+      state.grid[coordSystemPos.y][i] = CELLS.NOTHING;
+      console.log(i);
+    }
+  }
+
+  console.log(state.grid[coordSystemPos.y]);
+}
+
 
 const start = () => {
   const canvas = document.querySelector('#main-demo-canvas') as HTMLCanvasElement;
@@ -263,7 +329,10 @@ const start = () => {
     resize();
   });
 
-  canvas.addEventListener('click', (e) => {
+  // canvas.addEventListener('mousedown', console.log);
+  canvas.addEventListener('mousedown', (e) => {
+    state.mouseDown = true;
+
     const canvasRect = canvas.getBoundingClientRect();
     const clickPos = {
       x: e.clientX - canvasRect.left,
@@ -275,14 +344,37 @@ const start = () => {
       x: Math.floor(clickPos.x / cellSize),
       y: Math.floor(clickPos.y / cellSize)
     };
+    defineGridToPoint(coordSystemPos);
+
+
 
     if (state.placing === CELLS.WALL) {
-      const irreplaceableCells = [CELLS.START, CELLS.END] as (typeof CELLS[keyof typeof CELLS])[];
-      if (irreplaceableCells.includes(state.grid[coordSystemPos.y][coordSystemPos.x] as typeof CELLS[keyof typeof CELLS])) {
-        return;
+      if (!state.dragging) {
+        state.dragging = state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.WALL ? CELLS.NOTHING : CELLS.WALL
       }
-      state.grid[coordSystemPos.y][coordSystemPos.x] = state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.WALL ? CELLS.NOTHING : CELLS.WALL;
-    } else {
+      state.grid[coordSystemPos.y][coordSystemPos.x] = state.dragging;
+      reset();
+    }
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    state.mouseDown = false;
+    const canvasRect = canvas.getBoundingClientRect();
+    const clickPos = {
+      x: e.clientX - canvasRect.left,
+      y: e.clientY - canvasRect.top
+    };
+
+    const cellSize = getCellSize(canvas);
+    const coordSystemPos = {
+      x: Math.floor(clickPos.x / cellSize),
+      y: Math.floor(clickPos.y / cellSize)
+    };
+    defineGridToPoint(coordSystemPos);
+
+
+
+    if (state.placing !== CELLS.WALL){
       const prevCell = findCell(state.placing);
       if (state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.END && state.placing === CELLS.START) {
         state.grid[prevCell.y][prevCell.x] = CELLS.END;
@@ -293,9 +385,15 @@ const start = () => {
       }
       state.grid[coordSystemPos.y][coordSystemPos.x] = state.placing;
       state.placing = CELLS.WALL;
+
+
+      reset();
     }
-    reset();
+
+    state.dragging = null;
+
   });
+
 
   canvas.addEventListener('mousemove', (e) => {
     const canvasRect = canvas.getBoundingClientRect();
@@ -304,12 +402,31 @@ const start = () => {
       y: e.clientY - canvasRect.top
     };
 
+    if (state.mouseDown) {
+      const cellSize = getCellSize(canvas);
+      const coordSystemPos = {
+        x: Math.floor(mousePos.x / cellSize),
+        y: Math.floor(mousePos.y / cellSize)
+      };
+      defineGridToPoint(coordSystemPos);
+
+      if (state.placing === CELLS.WALL) {
+        const irreplaceableCells = [CELLS.START, CELLS.END] as (typeof CELLS[keyof typeof CELLS])[];
+        if (irreplaceableCells.includes(state.grid[coordSystemPos.y][coordSystemPos.x] as typeof CELLS[keyof typeof CELLS])) {
+          return;
+        }
+        state.grid[coordSystemPos.y][coordSystemPos.x] = state.dragging || CELLS.NOTHING;
+        // state.grid[coordSystemPos.y][coordSystemPos.x] =  ? CELLS.NOTHING : CELLS.WALL;
+      }
+
+      reset();
+    }
+
 
 
     state.mousePos = mousePos;
-    console.log(state);
+  });
 
-  })
 
   mainLoop(ctx, canvas);
 };
