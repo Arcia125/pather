@@ -22,8 +22,10 @@ export declare const state: {
     speed: number;
     diagonal: boolean;
     placing: typeof CELLS[keyof typeof CELLS];
+    dragging: typeof CELLS[keyof typeof CELLS] | null;
     grid: number[][];
     mousePos: Position;
+    mouseDown: boolean;
 };
 declare let gen: Generator<{
     solution: {
