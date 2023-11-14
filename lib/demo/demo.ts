@@ -384,14 +384,14 @@ const start = () => {
 
     if (state.placing !== CELLS.WALL){
       const prevCell = findCell(state.placing);
-      if (isIrreplaceableCell(coordSystemPos)) {
-        return;
-      }
       if (state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.END && state.placing === CELLS.START) {
         state.grid[prevCell.y][prevCell.x] = CELLS.END;
       } else if (state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.START && state.placing === CELLS.END) {
         state.grid[prevCell.y][prevCell.x] = CELLS.START;
       } else {
+        if (isIrreplaceableCell(coordSystemPos)) {
+          return;
+        }
         state.grid[prevCell.y][prevCell.x] = CELLS.NOTHING;
       }
       state.grid[coordSystemPos.y][coordSystemPos.x] = state.placing;
