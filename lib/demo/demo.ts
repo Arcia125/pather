@@ -293,7 +293,12 @@ const defineGridToPoint = (coordSystemPos: Position) => {
   }
 
   console.log(state.grid[coordSystemPos.y]);
-}
+};
+
+const isIrreplaceableCell = (coordSystemPos: Position) => {
+  const irreplaceableCells = [CELLS.START, CELLS.END] as (typeof CELLS[keyof typeof CELLS])[];
+  return irreplaceableCells.includes(state.grid[coordSystemPos.y][coordSystemPos.x] as typeof CELLS[keyof typeof CELLS]);
+};
 
 
 const start = () => {
@@ -352,6 +357,9 @@ const start = () => {
       if (!state.dragging) {
         state.dragging = state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.WALL ? CELLS.NOTHING : CELLS.WALL
       }
+      if (isIrreplaceableCell(coordSystemPos)) {
+        return;
+      }
       state.grid[coordSystemPos.y][coordSystemPos.x] = state.dragging;
       reset();
     }
@@ -376,6 +384,9 @@ const start = () => {
 
     if (state.placing !== CELLS.WALL){
       const prevCell = findCell(state.placing);
+      if (isIrreplaceableCell(coordSystemPos)) {
+        return;
+      }
       if (state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.END && state.placing === CELLS.START) {
         state.grid[prevCell.y][prevCell.x] = CELLS.END;
       } else if (state.grid[coordSystemPos.y][coordSystemPos.x] === CELLS.START && state.placing === CELLS.END) {
@@ -411,12 +422,10 @@ const start = () => {
       defineGridToPoint(coordSystemPos);
 
       if (state.placing === CELLS.WALL) {
-        const irreplaceableCells = [CELLS.START, CELLS.END] as (typeof CELLS[keyof typeof CELLS])[];
-        if (irreplaceableCells.includes(state.grid[coordSystemPos.y][coordSystemPos.x] as typeof CELLS[keyof typeof CELLS])) {
+        if (isIrreplaceableCell(coordSystemPos)) {
           return;
         }
         state.grid[coordSystemPos.y][coordSystemPos.x] = state.dragging || CELLS.NOTHING;
-        // state.grid[coordSystemPos.y][coordSystemPos.x] =  ? CELLS.NOTHING : CELLS.WALL;
       }
 
       reset();
