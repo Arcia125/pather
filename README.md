@@ -1,4 +1,4 @@
-![alt text](https://github.com/Arcia125/pather/blob/master/pather-image.png?raw=true)
+![alt text](https://github.com/Arcia125/pather/blob/master/github/assets/pather-image.png?raw=true)
 # Pather
 
 Pather is a versatile and typed pathfinding library designed for 2D games, offering the convenience of pathfinding without the need for a matrix or grid input.
