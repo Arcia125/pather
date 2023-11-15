@@ -3,10 +3,27 @@
 
 Pather is a versatile and typed pathfinding library designed for 2D games, offering the convenience of pathfinding without the need for a matrix or grid input.
 
+# Table of Contents
+- [Demo](#demo)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [API](#api)
+  - [`findPath(options: PathOptions): Position[] | undefined`](#findpathoptions-pathoptions-position--undefined)
+- [License](#license)
+
 ## Demo
 Explore the interactive demo on the [Pather Demo Page](https://arcia125.github.io/pather/) or run the following command to experience it locally:
 ```bash
 npm run dev
+```
+
+## Installation
+
+To integrate Pather into your project, install it via npm:
+
+```bash
+npm install @arcia125/pather
 ```
 
 ## Usage
@@ -59,14 +76,6 @@ Finds the path between the start and end positions based on the specified option
 
 - An array of `Position` representing the path if found.
 - `undefined` if no path is found.
-
-## Installation
-
-To integrate Pather into your project, install it via npm:
-
-```bash
-npm install @arcia125/pather
-```
 
 ## License
 
